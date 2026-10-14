@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10172a">
+<title>SkillMatch | Student Skill & Project Matcher</title>
+<style>
+:root{--bg:#f5f7ff;--card:#fff;--ink:#17213b;--muted:#66718a;--purple:#6757e8;--line:#e3e7f2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}
+header{background:#10172a;color:white;padding:22px max(20px,calc((100% - 1000px)/2))}
+.brand{font-size:21px;font-weight:800;letter-spacing:-.5px}
+.brand span{color:#a99dff}
+header p{color:#c7cde0;margin:6px 0 0;font-size:14px}
+main{max-width:1000px;margin:auto;padding:25px 16px 50px}
+.hero{background:linear-gradient(130deg,#6655e9,#8d66ec);color:white;border-radius:22px;padding:28px;margin-bottom:22px}
+.hero .tag{font-size:12px;font-weight:800;letter-spacing:1.5px}
+.hero h1{font-size:clamp(27px,5vw,42px);line-height:1.12;margin:12px 0}
+.hero p{line-height:1.6;max-width:570px;color:#f1efff}
+.pill{display:inline-block;background:#ffffff24;border:1px solid #ffffff55;padding:7px 12px;border-radius:20px;font-size:12px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 5px 20px #18234a08}
+h2{font-size:21px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 20px}
+label.field{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}
+input[type=text],select{width:100%;padding:12px;border:1px solid #d9deeb;border-radius:10px;background:white;color:var(--ink);font:inherit}
+input:focus,select:focus{outline:2px solid #a99dff;border-color:var(--purple)}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choices label{cursor:pointer}
+.choices input{position:absolute;opacity:0;width:1px;height:1px}
+.choices span{display:inline-block;padding:8px 10px;border:1px solid #dfe3f0;border-radius:9px;font-size:12px}
+.choices input:checked+span{background:#eeeaff;border-color:var(--purple);color:#4937ca;font-weight:700}
+.choices input:focus-visible+span{outline:2px solid var(--purple)}
+.actions{display:flex;gap:9px;margin-top:22px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 15px;font-weight:750}
+.primary{background:var(--purple);color:white;flex:1}
+.secondary{background:#eeeff8;color:var(--ink)}
+button:hover{filter:brightness(.97)}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
+.results{margin-top:24px}
+.results-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.results-top h2{margin:0}
+.count{font-size:12px;background:#e9e5ff;color:#4937ca;padding:6px 10px;border-radius:20px}
+.project-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.project{background:white;border:1px solid var(--line);border-radius:15px;padding:19px}
+.project .emoji{font-size:25px}
+.project h3{font-size:17px;margin:10px 0 7px}
+.project p{font-size:13px;line-height:1.6;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.meta span{font-size:11px;background:#f0efff;color:#5545bd;border-radius:6px;padding:5px 7px}
+.project .why{font-size:12px;color:#287653;background:#eaf8f0;padding:9px;border-radius:8px}
+.empty{background:white;border:1px dashed #cbd1e4;padding:25px;border-radius:15px;color:var(--muted);text-align:center;line-height:1.6}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:680px){.layout{grid-template-columns:1fr}.project-list{grid-template-columns:1fr}.hero{padding:23px}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">✦ Skill<span>Match</span></div>
+  <p>Discover your strengths. Find your next project.</p>
+</header>
+<main>
+<section class="hero">
+  <span class="tag">YOUR STUDENT PROJECT COMPANION</span>
+  <h1>Your skills.<br>Your next big idea.</h1>
+  <p>Tell us what you enjoy and what you can do. Get project suggestions designed around your interests, experience and learning goals.</p>
+  <span class="pill">🎓 Made for curious students</span>
+</section>
+
+<div class="layout">
+<section class="card">
+  <h2>Build your profile</h2>
+  <p class="sub">Choose the options that describe you best.</p>
+  <form id="matcher">
+    <label class="field" for="student">Your name (optional)</label>
+    <input id="student" type="text" placeholder="e.g. Sowmya" maxlength="50">
+
+    <label class="field" for="branch">Study branch</label>
+    <select id="branch">
+      <option value="cse">Computer Science / IT</option>
+      <option value="ece">Electronics / ECE</option>
+      <option value="mech">Mechanical Engineering</option>
+      <option value="civil">Civil Engineering</option>
+      <option value="other">Other / Exploring</option>
+    </select>
+
+    <label class="field" for="year">Current year</label>
+    <select id="year">
+      <option value="1">1st year</option>
+      <option value="2">2nd year</option>
+      <option value="3">3rd year</option>
+      <option value="4">4th year</option>
+    </select>
+
+    <label class="field">Your skills</label>
+    <div class="choices">
+      <label><input type="checkbox" name="skill" value="coding"><span>💻 Coding</span></label>
+      <label><input type="checkbox" name="skill" value="design"><span>🎨 Design</span></label>
+      <label><input type="checkbox" name="skill" value="electronics"><span>🔌 Electronics</span></label>
+      <label><input type="checkbox" name="skill" value="problem"><span>🧩 Problem solving</span></label>
+      <label><input type="checkbox" name="skill" value="research"><span>🔎 Research</span></label>
+      <label><input type="checkbox" name="skill" value="communication"><span>🗣️ Communication</span></label>
+      <label><input type="checkbox" name="skill" value="building"><span>🛠️ Building things</span></label>
+    </div>
+
+    <label class="field">Your interests</label>
+    <div class="choices">
+      <label><input type="checkbox" name="interest" value="education"><span>📚 Education</span></label>
+      <label><input type="checkbox" name="interest" value="environment"><span>🌱 Environment</span></label>
+      <label><input type="checkbox" name="interest" value="health"><span>❤️ Health & wellbeing</span></label>
+      <label><input type="checkbox" name="interest" value="community"><span>🤝 Social impact</span></label>
+      <label><input type="checkbox" name="interest" value="automation"><span>⚙️ Automation</span></label>
+      <label><input type="checkbox" name="interest" value="productivity"><span>📈 Productivity</span></label>
+    </div>
+
+    <label class="field" for="level">Preferred difficulty</label>
+    <select id="level">
+      <option value="any">Any difficulty</option>
+      <option value="Beginner">Beginner — just starting</option>
+      <option value="Intermediate">Intermediate — some experience</option>
+    </select>
+    <div class="actions">
+      <button class="primary" type="submit">✨ Find my projects</button>
+      <button class="secondary" type="reset">Reset</button>
+    </div>
+  </form>
+  <p class="note">Your selections stay in this page. This demo does not send or save personal data to a server.</p>
+</section>
+
+<section class="card">
+  <h2>How it works</h2>
+  <p class="sub">A simple way to turn your interests into practical project ideas.</p>
+  <p><strong>01 — Explore yourself</strong><br><span class="sub">Select your skills, interests and learning level.</span></p>
+  <p><strong>02 — Get matched</strong><br><span class="sub">The matcher scores projects against your choices and study branch.</span></p>
+  <p><strong>03 — Start building</strong><br><span class="sub">Review the project goal, tools and difficulty before you begin.</span></p>
+  <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+  <h2>Why this matters</h2>
+  <p class="sub">Students can struggle to choose projects that fit their current abilities. SkillMatch provides a starting point for exploring useful, achievable ideas instead of choosing randomly.</p>
+  <span class="pill" style="background:#eeeaff;color:#4937ca;border-color:#ddd6ff">💡 Learn by doing</span>
+</section>
+</div>
+
+<section class="results" id="results" aria-live="polite">
+  <div class="results-top"><h2>Recommended projects</h2><span class="count" id="count">Ready when you are</span></div>
+  <div class="empty" id="output">👋 Welcome! Complete your profile and tap <strong>Find my projects</strong> to see your personalized matches.</div>
+</section>
+</main>
+<footer>SkillMatch · Student Skill & Project Matcher · A student project prototype</footer>
+
+<script>
+const projects = [
+ {name:"Student Skill & Project Matcher",icon:"🎯",desc:"Build a tool that recommends project ideas based on a student's skills and interests.",skills:["coding","design","problem","research"],interests:["education","productivity"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Campus Lost & Found Portal",icon:"🔎",desc:"Create a simple campus portal where students can list and search for lost items.",skills:["coding","design","communication"],interests:["community","productivity"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Smart Waste Awareness Website",icon:"🌱",desc:"Teach users how to sort waste and find better recycling habits through an interactive guide.",skills:["coding","design","research"],interests:["environment","community"],branches:["cse","civil"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Study Planner & Task Tracker",icon:"📅",desc:"Make a study planner that lets students add tasks, track progress and organize their study time.",skills:["coding","design","problem"],interests:["education","productivity"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Accessible Learning Hub",icon:"📚",desc:"Design a student-friendly learning page with clear layouts, readable text and useful study links.",skills:["coding","design","communication"],interests:["education","community"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, accessibility"},
+ {name:"Plant Care Reminder",icon:"🪴",desc:"Prototype a plant-care guide that recommends watering schedules and eco-friendly gardening tips.",skills:["coding","research","design"],interests:["environment"],branches:["cse","civil"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Arduino Smart Plant Monitor",icon:"🌿",desc:"Prototype a soil-moisture monitor that can indicate when a plant needs water.",skills:["electronics","coding","building"],interests:["environment","automation"],branches:["ece","mech","other"],level:"Intermediate",tools:"Arduino, moisture sensor"},
+ {name:"Automatic Room Light Prototype",icon:"💡",desc:"Explore a small sensor-based prototype that switches a low-voltage light based on room occupancy.",skills:["electronics","coding","building"],interests:["automation","productivity"],branches:["ece","mech"],level:"Intermediate",tools:"Arduino, suitable sensors"},
+ {name:"Community Issue Reporting Portal",icon:"🤝",desc:"Design a website prototype for documenting campus or community issues and suggested solutions.",skills:["coding","design","communication","research"],interests:["community","productivity"],branches:["cse","civil"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Health Habit Journal",icon:"❤️",desc:"Create a private, local demo for tracking everyday wellbeing habits and learning about healthy routines.",skills:["coding","design","research"],interests:["health","productivity"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Bridge Structure Learning Model",icon:"🏗️",desc:"Build a simple classroom model to compare bridge shapes and explain how loads are distributed.",skills:["building","research","problem"],interests:["education","community"],branches:["civil","mech","other"],level:"Beginner",tools:"Cardboard, ruler, safe model materials"},
+ {name:"Mechanical Motion Demonstrator",icon:"⚙️",desc:"Create a classroom model demonstrating gears, levers or a simple mechanical linkage.",skills:["building","problem","research"],interests:["education","automation"],branches:["mech","other"],level:"Beginner",tools:"Classroom craft materials"},
+ {name:"Digital Campus Guide",icon:"🗺️",desc:"Build a searchable campus information page with sample locations, facilities and useful student contacts.",skills:["coding","design","communication"],interests:["education","community"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Electronic Quiz & Flashcards",icon:"🧠",desc:"Develop a quiz app with practice questions, instant feedback and a score summary.",skills:["coding","design","problem"],interests:["education","productivity"],branches:["cse"],level:"Beginner",tools:"HTML, CSS, JavaScript"},
+ {name:"Energy Saving Awareness Tool",icon:"🔋",desc:"Create an interactive calculator and awareness guide to explore everyday electricity-saving choices.",skills:["coding","research","problem"],interests:["environment","automation"],branches:["cse","ece","mech"],level:"Beginner",tools:"HTML, CSS, JavaScript"}
+];
+
+const form = document.getElementById("matcher");
+const output = document.getElementById("output");
+const count = document.getElementById("count");
+
+form.addEventListener("submit", function(event) {
+ event.preventDefault();
+ const selected = name => [...form.querySelectorAll('input[name="'+name+'"]:checked')].map(el=>el.value);
+ const skills = selected("skill");
+ const interests = selected("interest");
+ const branch = document.getElementById("branch").value;
+ const level = document.getElementById("level").value;
+ const year = Number(document.getElementById("year").value);
+ const name = document.getElementById("student").value.trim();
+ const matches = projects.map(p=>{
+   let score=0;
+   const sharedSkills=p.skills.filter(s=>skills.includes(s)).length;
+   const sharedInterests=p.interests.filter(i=>interests.includes(i)).length;
+   score += sharedSkills*3 + sharedInterests*4;
+   if(p.branches.includes(branch)) score+=3;
+   if(level!=="any" && p.level===level) score+=2;
+   if(level==="Beginner" && p.level==="Intermediate") score-=3;
+   if(year===1 && p.level==="Beginner") score+=1;
+   return {...p,score,sharedSkills,sharedInterests};
+ }).filter(p=>level==="any"||p.level===level||!(level==="Beginner"&&p.level==="Intermediate"))
+ .sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name))
+ .slice(0,6);
+
+ count.textContent=matches.length+" suggestions";
+ output.className="project-list";
+ output.innerHTML="";
+ if(!skills.length&&!interests.length){
+   output.className="empty";
+   output.textContent="Choose at least one skill or interest for more personalized matches. Here are some starter ideas: "+matches.slice(0,3).map(p=>p.name).join(", ")+".";
+   return;
+ }
+ const greeting=document.createElement("p");
+ greeting.style.gridColumn="1/-1";
+ greeting.style.color="var(--muted)";
+ greeting.textContent=(name?"Hi "+name+"! ":"")+"Here are your best matches based on your choices. These are suggestions, not guaranteed outcomes.";
+ output.appendChild(greeting);
+ matches.forEach((p,index)=>{
+   const article=document.createElement("article");
+   article.className="project";
+   const icon=document.createElement("div"); icon.className="emoji"; icon.textContent=p.icon;
+   const title=document.createElement("h3"); title.textContent=(index===0?"⭐ ":"")+p.name;
+   const desc=document.createElement("p"); desc.textContent=p.desc;
+   const meta=document.createElement("div"); meta.className="meta";
+   [p.level, p.tools, p.branches.includes(branch)?"Branch match":"Explore beyond branch"].forEach(value=>{
+     const chip=document.createElement("span");chip.textContent=value;meta.appendChild(chip);
+   });
+   const why=document.createElement("div");why.className="why";
+   why.textContent="Match: "+p.sharedSkills+" skill(s) · "+p.sharedInterests+" interest(s)";
+   article.append(icon,title,desc,meta,why);output.appendChild(article);
+ });
+ document.getElementById("results").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+form.addEventListener("reset",()=>{
+ setTimeout(()=>{
+  output.className="empty";
+  output.textContent="👋 Welcome! Complete your profile and tap Find my projects to see your personalized matches.";
+  count.textContent="Ready when you are";
+ },0);
+});
+</script>
+</body>
+</html>
